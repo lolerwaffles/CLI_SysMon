@@ -9,7 +9,7 @@ use termion::clear;
 
 fn main() { 
     let mut sys = System::new();
-    let ten_millis = time::Duration::from_millis(1000);
+    let polling_delay = time::Duration::from_millis(1000);
 
 loop {
     let now = time::Instant::now();
@@ -18,8 +18,8 @@ loop {
     print!("{}[2J", 27 as char);
 
     // Network data:
-    println!("input data : {} B", sys.get_network().get_income());
-    println!("output data: {} B", sys.get_network().get_outcome());
+    println!("RX: {} B/s", sys.get_network().get_income());
+    println!("TX: {} B/s", sys.get_network().get_outcome());
 
     // CPU temperature:
     println!("{:?}", sys.get_components_list()[3]);
@@ -41,8 +41,8 @@ loop {
     sys.refresh_all();
 
     // Sleep to limit polling time:
-    thread::sleep(ten_millis);
-    assert!(now.elapsed() >= ten_millis);
+    thread::sleep(polling_delay);
+    assert!(now.elapsed() >= polling_delay);
     println!("{}", clear::All);
     }
 }
